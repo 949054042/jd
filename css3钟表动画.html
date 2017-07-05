@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style id="style">
+        *{
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+        .wrap{
+            position: relative;
+            width: 400px;
+            height: 600px;
+            margin:0 auto;
+            background: url("images/clock.png") no-repeat center;
+        }
+        .c{
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            top: 0;
+            margin:auto;
+            width: 0;
+            height: 0;
+        }
+        .h,.min,.sec{
+            position: absolute;
+            width: 15px;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            margin:auto;
+            transform-origin: 50% 100%;
+            /*box-shadow: 0 0 4px 1px rgba(0,0,0,0.5);*/
+        }
+        .h{
+            height: 70px;
+            background: url("images/h.png") no-repeat center bottom;
+            z-index: 2;
+        }
+        .min{
+            height: 150px;
+            background: url("images/min.png") no-repeat center bottom;
+            z-index: 3;
+        }
+        .sec{
+            height: 180px;
+            bottom: -38px;
+            background: url("images/sec.png") no-repeat center bottom;
+            z-index: 4;
+            transform-origin: 50% 142px;
+        }
+        .now{
+            position: absolute;
+            font-size: 30px;
+            left: 40%;
+        }
+    </style>
+</head>
+<body>
+<div class="wrap">
+    <span class="now"></span>
+    <div class="c">
+        <div class="h"></div>
+        <div class="min"></div>
+        <div class="sec"></div>
+    </div>
+</div>
+
+</body>
+</html>
+<script>
+    let now = document.querySelector('.now');
+    let h = document.querySelector('.h');
+    let min = document.querySelector('.min');
+    let sec = document.querySelector('.sec');
+    let timer;
+    timer = setInterval(setTime,1000);
+    function setTime() {
+        let date = new Date();
+        let hh24 = date.getHours();
+        //24小时制转换为12小时制，用于计算角度
+        let hh12 = hh24>=12?hh24-12:hh24;
+        let mm = date.getMinutes();
+        let ss = date.getSeconds();
+        //用当前时分秒计算指针角度
+        h.style.transform = 'rotate('+((hh12+mm/60+ss/3600)*30)+'deg)';
+        min.style.transform = 'rotate('+((mm+ss/60)*6)+'deg)';
+        sec.style.transform = 'rotate('+(ss*6)+'deg)';
+        //初始化时分秒
+        hh24 = hh24<10?'0'+hh24:hh24;
+        mm = mm<10?'0'+mm:mm;
+        ss = ss<10?'0'+ss:ss;
+        now.innerHTML = hh24+':'+ mm+':'+ss;
+    }
+    setTime();
+</script>
